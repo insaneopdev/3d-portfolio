@@ -1,0 +1,78 @@
+/* Compact the existing 3D-attached annotation so more of the model stays visible. */
+.scene-project-annotation {
+  width: min(286px, calc(100vw - 32px)) !important;
+  max-width: calc(100vw - 32px) !important;
+  padding: 14px 16px !important;
+  border-radius: 12px !important;
+  box-shadow: 0 14px 34px rgba(43, 38, 56, .14) !important;
+}
+
+.scene-project-annotation > strong {
+  margin-top: 9px !important;
+  font-size: 22px !important;
+}
+
+.scene-project-annotation p {
+  margin: 8px 0 !important;
+  font-size: 10px !important;
+  line-height: 1.6 !important;
+}
+
+.scene-annotation-stack { gap: 4px !important; }
+.scene-annotation-stack span { padding: 4px 6px !important; font-size: 7px !important; }
+.scene-annotation-hint { margin-top: 9px !important; }
+
+.scene-project-arrow {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, .94);
+  border-radius: 50%;
+  background: rgba(250, 249, 246, .92);
+  color: #343044;
+  box-shadow: 0 8px 22px rgba(35, 29, 65, .14);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  font: 400 24px/1 Manrope, system-ui, sans-serif;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, box-shadow .2s ease, scale .2s ease;
+}
+
+.scene-project-arrow:hover {
+  background: #7167f4;
+  color: #fff;
+  box-shadow: 0 10px 26px rgba(81, 75, 190, .22);
+  scale: 1.06;
+}
+
+.scene-project-arrow:active { scale: .96; }
+.scene-project-arrow:focus-visible { outline: 2px solid #7167f4; outline-offset: 3px; }
+
+/* Prevent scroll chaining outside open project and archive dialogs. */
+html.viewer-scroll-locked,
+body.viewer-scroll-locked {
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+.project-modal,
+.more-projects-modal {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 700px) {
+  .scene-project-annotation {
+    width: min(266px, calc(100vw - 28px)) !important;
+    max-width: calc(100vw - 28px) !important;
+    padding: 13px 14px !important;
+  }
+
+  .scene-project-annotation > strong { font-size: 20px !important; }
+  .scene-project-arrow { width: 34px; height: 34px; font-size: 21px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-project-arrow { transition: none !important; scale: 1 !important; }
+}
