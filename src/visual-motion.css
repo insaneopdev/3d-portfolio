@@ -1,0 +1,218 @@
+/* Premium motion enhancements for the existing portfolio. */
+
+.portfolio-app.motion-enhanced {
+  --motion-pointer-x: 18%;
+  --motion-pointer-y: 14%;
+  background-color: var(--bg, #f4f1ea);
+  background-image:
+    radial-gradient(
+      48rem circle at var(--motion-pointer-x, 18%) var(--motion-pointer-y, 14%),
+      rgba(105, 100, 245, 0.105),
+      transparent 68%
+    ),
+    radial-gradient(
+      38rem circle at 88% 48%,
+      rgba(238, 120, 91, 0.075),
+      transparent 72%
+    ),
+    radial-gradient(
+      30rem circle at 8% 84%,
+      rgba(92, 165, 146, 0.065),
+      transparent 74%
+    );
+  background-repeat: no-repeat;
+}
+
+.portfolio-app.motion-enhanced .site-header {
+  transition:
+    background-color 280ms ease,
+    box-shadow 280ms ease,
+    border-color 280ms ease;
+}
+
+.portfolio-app.motion-enhanced .site-header.motion-scrolled {
+  background-color: rgba(244, 241, 234, 0.95);
+  box-shadow: 0 10px 32px rgba(35, 31, 54, 0.055);
+  border-bottom-color: rgba(37, 35, 54, 0.12);
+}
+
+.portfolio-app.motion-enhanced .scroll-progress {
+  will-change: transform;
+}
+
+.portfolio-app.motion-enhanced .site-header nav a {
+  position: relative;
+  text-decoration: none;
+}
+
+.portfolio-app.motion-enhanced .site-header nav a::after {
+  position: absolute;
+  right: 0;
+  bottom: -5px;
+  left: 0;
+  height: 1px;
+  content: '';
+  background: linear-gradient(90deg, var(--blue, #5158ed), var(--coral, #ee785b));
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 240ms ease;
+}
+
+.portfolio-app.motion-enhanced .site-header nav a:hover::after,
+.portfolio-app.motion-enhanced .site-header nav a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.portfolio-app.motion-enhanced :where(
+  .project-card,
+  .project-tile,
+  .archive-card,
+  .experience-card,
+  .contact-card,
+  .scene-focus-card
+) {
+  transform-origin: center center;
+  transition:
+    border-color 280ms ease,
+    background-color 280ms ease,
+    box-shadow 280ms ease;
+}
+
+.portfolio-app.motion-enhanced :where(
+  .project-card,
+  .project-tile,
+  .archive-card,
+  .experience-card,
+  .contact-card
+):hover {
+  border-color: rgba(81, 88, 237, 0.28);
+}
+
+.portfolio-app.motion-enhanced .project-preview-static {
+  isolation: isolate;
+}
+
+.portfolio-app.motion-enhanced .project-preview-static .preview-shape-a {
+  animation: motion-preview-float-a 6.2s ease-in-out infinite;
+  will-change: translate;
+}
+
+.portfolio-app.motion-enhanced .project-preview-static .preview-shape-b {
+  animation: motion-preview-float-b 7.1s ease-in-out infinite;
+  will-change: translate;
+}
+
+.portfolio-app.motion-enhanced .project-preview-static .preview-shape-c {
+  animation: motion-preview-float-c 5.8s ease-in-out infinite;
+  will-change: translate;
+}
+
+.portfolio-app.motion-enhanced :where(
+  .project-card,
+  .project-tile,
+  .archive-card
+) .project-preview-static::after {
+  position: absolute;
+  z-index: 2;
+  inset: -45% -85%;
+  content: '';
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    112deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.4) 48%,
+    rgba(255, 255, 255, 0.08) 54%,
+    transparent 67%
+  );
+  transform: translateX(-48%) rotate(12deg);
+}
+
+.portfolio-app.motion-enhanced :where(
+  .project-card,
+  .project-tile,
+  .archive-card
+):hover .project-preview-static::after {
+  opacity: 1;
+  transform: translateX(48%) rotate(12deg);
+  transition:
+    transform 820ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 200ms ease;
+}
+
+.portfolio-app.motion-enhanced .scene-project-annotation {
+  transition:
+    box-shadow 260ms ease,
+    border-color 260ms ease,
+    background-color 260ms ease;
+}
+
+.portfolio-app.motion-enhanced .scene-project-annotation:hover {
+  border-color: color-mix(in srgb, var(--annotation-accent, #5158ed) 42%, transparent);
+  box-shadow: 0 16px 42px rgba(29, 27, 46, 0.13);
+}
+
+.portfolio-app.motion-enhanced :where(a, button, [role=button]):focus-visible {
+  outline: 2px solid rgba(81, 88, 237, 0.88);
+  outline-offset: 4px;
+}
+
+@keyframes motion-preview-float-a {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -7px; }
+}
+
+@keyframes motion-preview-float-b {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 6px 4px; }
+}
+
+@keyframes motion-preview-float-c {
+  0%, 100% { translate: 0 0; }
+  50% { translate: -5px -5px; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-app.motion-enhanced :where(a, button) {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@media (max-width: 720px) {
+  .portfolio-app.motion-enhanced {
+    background-image:
+      radial-gradient(
+        28rem circle at var(--motion-pointer-x, 18%) var(--motion-pointer-y, 14%),
+        rgba(105, 100, 245, 0.075),
+        transparent 72%
+      ),
+      radial-gradient(
+        24rem circle at 90% 45%,
+        rgba(238, 120, 91, 0.055),
+        transparent 75%
+      );
+  }
+
+  .portfolio-app.motion-enhanced .project-preview-static .preview-shape-a,
+  .portfolio-app.motion-enhanced .project-preview-static .preview-shape-b,
+  .portfolio-app.motion-enhanced .project-preview-static .preview-shape-c {
+    animation-duration: 8s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-app.motion-enhanced,
+  .portfolio-app.motion-enhanced * {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    will-change: auto !important;
+  }
+
+  .portfolio-app.motion-enhanced .project-preview-static::after,
+  .portfolio-app.motion-enhanced .project-card,
+  .portfolio-app.motion-enhanced .project-tile,
+  .portfolio-app.motion-enhanced .archive-card {
+    transform: none !important;
+  }
+}

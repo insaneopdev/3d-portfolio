@@ -214,7 +214,7 @@ function ProjectGeometry({ project }) {
 function AnimatedProject({ project, onClick }) {
   const ref = useRef();
   useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.y += delta * 0.09;
+    if (ref.current) ref.current.rotation.y += delta * 0.5;
   });
   return <group
     ref={ref}
