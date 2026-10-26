@@ -1,0 +1,57 @@
+#physics-cursor-root {
+ position: fixed;
+ inset: 0;
+ z-index: 2147483000;
+ pointer-events: none;
+ isolation: isolate;
+}
+
+.physics-cursor-layer {
+ position: fixed;
+ inset: 0;
+ width: 100%;
+ height: 100%;
+ overflow: hidden;
+ pointer-events: none;
+ opacity: 0;
+ contain: layout paint;
+ will-change: opacity;
+ transition: opacity 140ms ease-out;
+}
+
+.physics-cursor-layer.is-visible {
+ opacity: 1;
+}
+
+.physics-cursor-layer canvas {
+ display: block !important;
+ width: 100% !important;
+ height: 100% !important;
+ pointer-events: none !important;
+}
+
+/* Replace the system arrow while retaining normal browser hit-testing. */
+html.physics-cursor-enabled,
+html.physics-cursor-enabled body,
+html.physics-cursor-enabled body * {
+ cursor: none !important;
+}
+
+/* The new 3D cursor supersedes the existing DOM-based cube/keychain cursor. */
+html.physics-cursor-enabled .motion-cursor {
+ display: none !important;
+ visibility: hidden !important;
+ opacity: 0 !important;
+}
+
+@media (hover: none), (pointer: coarse) {
+ #physics-cursor-root {
+ display: none !important;
+ }
+}
+
+@media (prefers-reduced-motion: reduce) {
+ .physics-cursor-layer {
+ transition: none !important;
+ }
+}
