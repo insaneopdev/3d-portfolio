@@ -1,12 +1,25 @@
-import { Suspense, useRef } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float, Html, OrbitControls, Sparkles } from '@react-three/drei';
 
 const metal = { metalness: 0.35, roughness: 0.28 };
 
+/* Existing project metadata used to browse the models already supported by this viewer. */
+const VIEWER_PROJECTS = [
+  { id: 'sand', number: '01', name: 'SandScope', category: 'AI / COASTAL INTELLIGENCE', year: 'SIH ’25', description: 'Turning shoreline imagery into meaningful coastal signals, from boundary detection to sand-grain size estimation.', details: 'SandScope explores how shoreline imagery can be transformed into measurable coastal insights. The pipeline estimates sand-grain size from images and combines image-based predictions with environmental attributes to support coastal monitoring and understanding of erosion patterns.', stack: ['Python', 'Machine learning', 'OpenCV', 'Image processing', 'Hardware integration'], result: 'Shoreline analysis and sand-attribute detection', accent: '#5a56e8', model: 'shoreline', type: 'Featured project' },
+  { id: 'vision', number: '02', name: 'VisionGuard', category: 'REAL-TIME AI / INDUSTRIAL SAFETY', year: 'DELPHI TVS', description: 'A vision-language safety monitoring system for detecting PPE compliance through existing CCTV infrastructure.', details: 'The safety surveillance workflow analyses frames to detect protective equipment such as helmets, goggles, masks, and vests. Multi-frame temporal verification helps reduce false positives, with industrial hardware and PLC/Modbus integration explored for safety alerts.', stack: ['Python', 'PyTorch', 'OpenCV', 'Vision-language models', 'PLC / Modbus'], result: 'Industrial AI / ML internship project', accent: '#ee785b', model: 'helmet', type: 'Featured project' },
+  { id: 'blind', number: '03', name: 'BlindSight', category: 'ASSISTIVE TECHNOLOGY', year: 'HACKATHON PROJECT', description: 'Smart glasses exploring context-aware navigation, scene descriptions, and obstacle awareness.', details: 'A wearable smart-glasses concept using vision-language models to describe scenes and detect obstacles. It combines macro-navigation with map routing and micro-navigation for obstacle avoidance to support more independent mobility.', stack: ['Python', 'OpenCV', 'Vision-language models', 'Maps API', 'Sensor fusion'], result: '1st place at a hackathon', accent: '#609b56', model: 'glasses', type: 'Featured project' },
+  { id: 'ariv', number: '04', name: 'ARIV.AI', category: 'AI / AUDIO AUTHENTICITY', year: 'PRODUCT CONCEPT', description: 'A phone-first concept for detecting potential AI-generated voice clones during calls.', details: 'ARIV.AI explores real-time call-audio analysis with clear safety signals and a reviewable record of analysed audio. It is presented as a product concept rather than a claim of a deployed detection service.', stack: ['AI audio analysis', 'Machine learning', 'Real-time processing', 'Mobile UX'], result: 'Voice authenticity product concept', accent: '#8b68ce', model: 'audio', type: 'AI / Product' },
+  { id: 'power', number: '05', name: 'Power Insights Dashboard', category: 'DATA / INDUSTRIAL INSIGHTS', year: 'DELPHI TVS', description: 'An analytics dashboard that makes energy data easier to interpret across departments.', details: 'The platform processes heterogeneous energy spreadsheets with automatic schema detection and presents interactive trends, peak-usage patterns, and department-level comparisons to support energy analysis.', stack: ['Python', 'Pandas', 'Excel automation', 'Data visualisation', 'Web development'], result: 'Industrial analytics dashboard', accent: '#3d91a0', model: 'dashboard', type: 'Data / Dashboard' },
+  { id: 'co2', number: '06', name: 'CO₂ Safety Checklist', category: 'MOBILE / INDUSTRIAL SAFETY', year: 'DELPHI TVS', description: 'A Flutter inspection workflow with AI-assisted safety checklist validation.', details: 'The mobile inspection experience supports checklist verification using image recognition. The workflow includes offline-first operation, cloud synchronisation, timestamped records, and compliance reporting.', stack: ['Flutter', 'Dart', 'Computer vision', 'AI image recognition', 'Cloud sync'], result: 'Mobile safety application', accent: '#b7854b', model: 'checklist', type: 'Mobile / Safety' },
+  { id: 'induction', number: '07', name: 'Safety Induction Website', category: 'WEB / LEARNING EXPERIENCE', year: 'DELPHI TVS', description: 'A digital training experience for safety induction and workforce readiness.', details: 'A structured website concept for delivering essential safety training information. The internship work also involved training workflows, assessment modules, performance tracking, and multilingual experience considerations.', stack: ['HTML', 'CSS', 'JavaScript', 'Web development', 'SQL'], result: 'Safety training web experience', accent: '#568c69', model: 'browser', type: 'Web / Learning' },
+  { id: 'wow', number: '08', name: 'WoWSQL Web Products', category: 'SOFTWARE / WEB ENGINEERING', year: 'CURRENT ROLE', description: 'Full-stack product engineering work connected to wowfolio.in and wowcare.pro.', details: 'Software engineering work connected to the existing WoWSQL web products.', stack: ['Web development', 'APIs', 'Relational data'], result: 'Full-stack product engineering', accent: '#5279bd', model: 'webproducts', type: 'Software / Web' },
+  { id: 'vr', number: '09', name: 'VR Model', category: 'IMMERSIVE 3D MODEL', description: 'The existing VR artwork available in this viewer.', details: 'This entry uses the existing VR model component in the viewer.', stack: ['3D', 'VR'], result: 'Existing VR model', accent: '#c06c9a', model: 'vr', type: '3D / VR' },
+];
+
 function ShorelineModel() {
   return <group>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.82, 0]} receiveShadow><cylinderGeometry args={[1.85, 1.85, 0.12, 64]} /><meshStandardMaterial color="#d8c29a" roughness={0.8} /></mesh>
+    <mesh position={[0, -0.80, 0]} receiveShadow><cylinderGeometry args={[1.85, 1.85, 0.12, 64]} /><meshStandardMaterial color="#d8c29a" roughness={0.8} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.74, 0]}><circleGeometry args={[1.82, 64]} /><meshStandardMaterial color="#ead9b6" roughness={0.95} /></mesh>
     <mesh position={[-0.1, -0.68, -0.02]} rotation={[0.02, 0, -0.12]}><boxGeometry args={[3.1, 0.07, 0.65]} /><meshStandardMaterial color="#76a9c7" roughness={0.35} /></mesh>
     <mesh position={[0.1, -0.60, 0.28]} rotation={[0, 0, 0.12]}><boxGeometry args={[2.5, 0.08, 0.44]} /><meshStandardMaterial color="#b7d4d8" roughness={0.4} /></mesh>
@@ -146,23 +159,79 @@ export function ProjectPreview({ project, compact = false }) {
   </Canvas>;
 }
 
-export default function Scene3D({ project, onProjectSelect }) {
-  return <Canvas className="main-project-canvas" shadows dpr={[1, 1.7]} camera={{ position: [0, 0.25, 6.9], fov: 37 }} gl={{ alpha: true, antialias: true }}>
+function ArrowButton({ direction, onNavigate, name }) {
+  const isPrevious = direction < 0;
+  return <Html position={[isPrevious ? -2.35 : 2.35, -0.1, 0.4]} center distanceFactor={7.5} zIndexRange={[5, 0]}>
+    <button
+      type="button"
+      className="scene-project-arrow"
+      aria-label={`${isPrevious ? 'Previous' : 'Next'} 3D project`}
+      title={`${isPrevious ? 'Previous' : 'Next'} project`}
+      onPointerDown={(event) => event.stopPropagation()}
+      onClick={(event) => { event.stopPropagation(); onNavigate(direction); }}
+      onPointerEnter={(event) => { event.currentTarget.style.backgroundColor = '#7167f4'; event.currentTarget.style.color = '#fff'; event.currentTarget.style.transform = 'scale(1.06)'; }}
+      onPointerLeave={(event) => { event.currentTarget.style.backgroundColor = 'rgba(250, 249, 246, .92)'; event.currentTarget.style.color = '#343044'; event.currentTarget.style.transform = 'scale(1)'; }}
+      style={{ display: 'grid', placeItems: 'center', width: 38, height: 38, padding: 0, border: '1px solid rgba(255,255,255,.95)', borderRadius: '50%', background: 'rgba(250,249,246,.92)', color: '#343044', boxShadow: '0 8px 22px rgba(35,29,65,.16)', backdropFilter: 'blur(10px)', cursor: 'pointer', pointerEvents: 'auto', transition: 'transform .2s ease, background-color .2s ease, color .2s ease' }}
+    >
+      <span aria-hidden="true" style={{ display: 'block', marginTop: -2, font: '24px/1 Manrope, system-ui, sans-serif' }}>{isPrevious ? '←' : '→'}</span>
+    </button>
+  </Html>;
+}
+
+export default function Scene3D({ project, onProjectSelect, projects: suppliedProjects, onProjectChange }) {
+  const projectOptions = useMemo(() => {
+    const source = Array.isArray(suppliedProjects) && suppliedProjects.length ? suppliedProjects : VIEWER_PROJECTS;
+    const matchingIndex = source.findIndex((item) => item.id === project?.id);
+    if (matchingIndex < 0) return project ? [project, ...source.filter((item) => item.id !== project.id)] : source;
+    return source.map((item, index) => index === matchingIndex ? { ...item, ...project } : item);
+  }, [project, suppliedProjects]);
+
+  const [viewerProject, setViewerProject] = useState(project);
+  useEffect(() => {
+    setViewerProject(project);
+  }, [project?.id]);
+
+  const activeProject = projectOptions.find((item) => item.id === viewerProject?.id) || viewerProject || project || VIEWER_PROJECTS[0];
+  const activeIndex = Math.max(0, projectOptions.findIndex((item) => item.id === activeProject.id));
+
+  const navigateProject = (direction) => {
+    if (!projectOptions.length) return;
+    const nextIndex = (activeIndex + direction + projectOptions.length) % projectOptions.length;
+    const nextProject = projectOptions[nextIndex];
+    setViewerProject(nextProject);
+    // If the parent supports controlled project navigation, keep its page state in sync.
+    onProjectChange?.(nextProject);
+  };
+
+  return <Canvas className="main-project-canvas" shadows dpr={[1, 1.7]} camera={{ position: [0, 0.3, 10], fov: 37 }} gl={{ alpha: true, antialias: true }}>
     <color attach="background" args={['#efedf2']} />
-    <fog attach="fog" args={['#efedf2', 8, 16]} />
-    <ambientLight intensity={1.1} /><directionalLight position={[5, 6, 5]} intensity={2.15} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} /><pointLight position={[-4, 1.2, 2]} intensity={1.4} color={project.accent} />
+    <fog attach="fog" args={['#efedf2', 10, 16]} />
+    <ambientLight intensity={1.1} /><directionalLight position={[5, 6, 5]} intensity={2.15} castShadow shadow-mapSize-width={1024} shadow-mapSize-height={1024} /><pointLight position={[-4, 1.2, 2]} intensity={1.4} color={activeProject.accent} />
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1.38, 0]} receiveShadow><circleGeometry args={[6, 64]} /><meshStandardMaterial color="#e8e5ea" roughness={0.9} /></mesh>
-    <mesh rotation={[Math.PI / 2.5, 0.2, 0]} position={[0, 0, -0.45]}><torusGeometry args={[2.48, 0.012, 8, 150]} /><meshBasicMaterial color={project.accent} transparent opacity={0.45} /></mesh>
+    <mesh rotation={[Math.PI / 2.5, 0.2, 0]} position={[0, 0, -0.45]}><torusGeometry args={[2.48, 0.012, 8, 150]} /><meshBasicMaterial color={activeProject.accent} transparent opacity={0.45} /></mesh>
     <mesh rotation={[Math.PI / 2.3, -0.2, 0.4]} position={[0, 0.03, -0.35]}><torusGeometry args={[2.02, 0.009, 8, 150]} /><meshBasicMaterial color="#e99f7c" transparent opacity={0.7} /></mesh>
     <Suspense fallback={null}>
-      <AnimatedProject project={project} onClick={onProjectSelect} />
-      <Sparkles count={55} scale={7.6} size={1.5} speed={0.2} color={project.accent} opacity={0.48} />
-      <Html position={[0, 1.85, 0]} center distanceFactor={7.5} zIndexRange={[2, 0]}>
-        <button className="scene-project-annotation" onClick={() => onProjectSelect?.(project)} style={{ '--annotation-accent': project.accent }}>
-          <span className="scene-annotation-kicker"><i /> PROJECT IN FOCUS</span><strong>{project.name}</strong><span className="scene-annotation-category">{project.category}</span><p>{project.description}</p><span className="scene-annotation-stack">{project.stack.slice(0, 3).map((item) => <span key={item}>{item}</span>)}</span><span className="scene-annotation-hint">CLICK OBJECT FOR FULL DETAILS ↗</span>
+      <AnimatedProject project={activeProject} onClick={() => onProjectSelect?.(activeProject)} />
+      <Sparkles count={55} scale={7.6} size={1.5} speed={0.2} color={activeProject.accent} opacity={0.48} />
+      <Html position={[-1.25, 1.85, 0]} center distanceFactor={7.5} zIndexRange={[2, 0]}>
+        <button
+          type="button"
+          className="scene-project-annotation"
+          onClick={() => onProjectSelect?.(activeProject)}
+          style={{ '--annotation-accent': activeProject.accent, width: '240px', maxWidth: 'calc(100vw - 48px)', padding: '12px 14px', borderRadius: '12px', boxSizing: 'border-box' }}
+        >
+          <span className="scene-annotation-kicker"><i /> PROJECT IN FOCUS</span>
+          <strong style={{ display: 'block', marginTop: '8px', fontSize: '20px' }}>{activeProject.name}</strong>
+          <span className="scene-annotation-category">{activeProject.category}</span>
+          <p style={{ margin: '8px 0', fontSize: '10px', lineHeight: 1.55 }}>{activeProject.description}</p>
+          <span className="scene-annotation-stack">{(activeProject.stack || []).slice(0, 3).map((item) => <span key={item}>{item}</span>)}</span>
+          <span className="scene-annotation-hint">CLICK OBJECT FOR FULL DETAILS ↗</span>
         </button>
       </Html>
+      <ArrowButton direction={-1} onNavigate={navigateProject} name={activeProject.name} />
+      <ArrowButton direction={1} onNavigate={navigateProject} name={activeProject.name} />
     </Suspense>
-    <OrbitControls makeDefault enablePan enableZoom minDistance={4.8} maxDistance={9.5} enableDamping dampingFactor={0.07} rotateSpeed={0.65} />
+    {/* The original drag orbit, pan and zoom interactions remain enabled. Slower zoom and safer distance limits prevent the opening model from feeling abruptly magnified. */}
+    <OrbitControls makeDefault enablePan enableZoom zoomSpeed={0.5} minDistance={5.8} maxDistance={11} enableDamping dampingFactor={0.07} rotateSpeed={0.65} />
   </Canvas>;
 }
