@@ -22,6 +22,8 @@ function CursorRig({ pointerRef, interactionRef, reducedMotion }) {
  const pendantRef = useRef(null);
  const initializedRef = useRef(false);
  const lastAnchorRef = useRef(new THREE.Vector3());
+ const smoothedAnchorRef = useRef(new THREE.Vector3());
+ const pendantAngleRef = useRef(0);
  const scratchVectorRef = useRef(new THREE.Vector3());
  const mixedColorRef = useRef(new THREE.Color());
  const hoverAmountRef = useRef(0);
@@ -40,19 +42,35 @@ function CursorRig({ pointerRef, interactionRef, reducedMotion }) {
  if (!pointer.hasPosition) return;
 
  const dt = Math.min(Math.max(frameDelta, 1 / 240), 1 / 30);
- const anchorX = pointer.x - size.width / 2;
- const anchorY = size.height / 2 - pointer.y;
+ const targetAnchorX = pointer.x - size.width / 2;
+ const targetAnchorY = size.height / 2 - pointer.y;
  let pointerDeltaX = 0;
  let pointerDeltaY = 0;
 
  if (!initializedRef.current) {
+ smoothedAnchorRef.current.set(targetAnchorX, targetAnchorY, 0);
  for (let index = 0; index < NODE_COUNT; index += 1) {
- points[index].set(anchorX, anchorY - index * LINK_LENGTH, 0);
+ points[index].set(targetAnchorX, targetAnchorY - index * LINK_LENGTH, 0);
  previousPoints[index].copy(points[index]);
  }
- lastAnchorRef.current.set(anchorX, anchorY, 0);
+ lastAnchorRef.current.set(targetAnchorX, targetAnchorY, 0);
  initializedRef.current = true;
- } else {
+ }
+
+ // Ease the physical anchor toward the mouse target. This prevents large pointer
+ // jumps from injecting an unrealistic amount of energy into the chain.
+ const anchorFollow = reducedMotion ? 1 : 1 - Math.exp(-8 * dt);
+ const anchorStepX = (targetAnchorX - smoothedAnchorRef.current.x) * anchorFollow;
+ const anchorStepY = (targetAnchorY - smoothedAnchorRef.current.y) * anchorFollow;
+ const anchorStepLength = Math.hypot(anchorStepX, anchorStepY);
+ const maxAnchorStep = 22;
+ const anchorStepScale = anchorStepLength > maxAnchorStep ? maxAnchorStep / anchorStepLength : 1;
+ smoothedAnchorRef.current.x += anchorStepX * anchorStepScale;
+ smoothedAnchorRef.current.y += anchorStepY * anchorStepScale;
+ const anchorX = smoothedAnchorRef.current.x;
+ const anchorY = smoothedAnchorRef.current.y;
+
+ if (initializedRef.current) {
  pointerDeltaX = anchorX - lastAnchorRef.current.x;
  pointerDeltaY = anchorY - lastAnchorRef.current.y;
  lastAnchorRef.current.set(anchorX, anchorY, 0);
@@ -186,16 +204,30 @@ function CursorRig({ pointerRef, interactionRef, reducedMotion }) {
  }
 
  const endPoint = points[NODE_COUNT - 1];
- const previousEndPoint = previousPoints[NODE_COUNT - 1];
- const swingX = endPoint.x - previousEndPoint.x;
- const swingY = endPoint.y - previousEndPoint.y;
+ const linkBeforeEnd = points[NODE_COUNT - 2];
+ // The pendant hangs below its attachment point. Its down vector must extend
+ // the final simulated link, rather than being counter-rotated or velocity-led.
+ const chainTilt = Math.atan2(
+ endPoint.x - linkBeforeEnd.x,
+ Math.max(0.001, linkBeforeEnd.y - endPoint.y)
+ );
+ const angleDelta = Math.atan2(
+ Math.sin(chainTilt - pendantAngleRef.current),
+ Math.cos(chainTilt - pendantAngleRef.current)
+ );
+ const continuousTilt = pendantAngleRef.current + angleDelta;
+ pendantAngleRef.current = reducedMotion
+ ? 0
+ : THREE.MathUtils.damp(pendantAngleRef.current, continuousTilt, 16, dt);
 
  if (pendantRef.current) {
- pendantRef.current.position.set(endPoint.x, endPoint.y - 14, 3.15);
+ // The group origin is the connector loop, so every rotation keeps the last
+ // chain link physically attached to the top of the keychain.
+ pendantRef.current.position.set(endPoint.x, endPoint.y, 3.15);
  pendantRef.current.rotation.set(
- reducedMotion ? 0 : THREE.MathUtils.clamp(-swingY * 0.012, -0.42, 0.42),
- reducedMotion ? 0 : THREE.MathUtils.clamp(swingX * 0.018, -0.62, 0.62),
- reducedMotion ? 0 : THREE.MathUtils.clamp(swingX * 0.012, -0.48, 0.48)
+ 0,
+ 0,
+ reducedMotion ? 0 : THREE.MathUtils.clamp(pendantAngleRef.current, -0.78, 0.78)
  );
  const pendantScale = 1 - pressAmountRef.current * 0.11;
  pendantRef.current.scale.setScalar(pendantScale);
@@ -258,6 +290,7 @@ function CursorRig({ pointerRef, interactionRef, reducedMotion }) {
 
  {/* Custom pendant: bevelled metallic housing and a contrasting monogram. */}
  <group ref={pendantRef}>
+ <group position={[0, -14, 0]}>
  <RoundedBox
  args={[25, 30, 5]}
  radius={4.5}
@@ -364,6 +397,7 @@ function CursorRig({ pointerRef, interactionRef, reducedMotion }) {
  roughness={0.18}
  />
  </mesh>
+ </group>
  </group>
  </>
  );
