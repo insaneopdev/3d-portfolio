@@ -1,0 +1,422 @@
+/* Living motion layer: build on the portfolio's existing warm-neutral, indigo and coral palette. */
+.portfolio-shell.living-motion-enabled {
+ --living-indigo: #5a56e8;
+ --living-coral: #ee785b;
+ --living-mint: #5ca592;
+ --living-ink: #252336;
+ --living-ease: cubic-bezier(0.2, 0.72, 0.2, 1);
+ position: relative;
+ isolation: isolate;
+}
+
+.portfolio-shell.living-motion-enabled::before {
+ content: '';
+ position: absolute;
+ z-index: -1;
+ inset: 0;
+ pointer-events: none;
+ background:
+ radial-gradient(38rem circle at var(--living-pointer-x, 50%) var(--living-pointer-y, 12%), rgba(97, 88, 239, 0.095), transparent 72%),
+ radial-gradient(34rem circle at 92% 38%, rgba(238, 120, 91, 0.065), transparent 74%),
+ radial-gradient(30rem circle at 8% 80%, rgba(92, 165, 146, 0.055), transparent 76%),
+ repeating-linear-gradient(0deg, rgba(55, 49, 86, 0.018) 0, rgba(55, 49, 86, 0.018) 1px, transparent 1px, transparent 5px);
+ background-repeat: no-repeat;
+}
+
+/* Progressive content reveals. Individual translate keeps existing transforms untouched. */
+.portfolio-shell.living-motion-enabled .living-reveal {
+ opacity: 0;
+ translate: 0 20px;
+ transition:
+ opacity 640ms var(--living-ease),
+ translate 640ms var(--living-ease);
+ transition-delay: var(--living-delay, 0ms);
+ will-change: opacity, translate;
+}
+
+.portfolio-shell.living-motion-enabled .living-reveal.is-living-visible {
+ opacity: 1;
+ translate: 0 0;
+ will-change: auto;
+}
+
+/* The hero gets a little more energy without moving or resizing its layout. */
+.portfolio-shell.living-motion-enabled .hero-copy .section-eyebrow {
+ animation: living-eyebrow-arrive 740ms var(--living-ease) both;
+}
+
+.portfolio-shell.living-motion-enabled .hero-copy h1 em {
+ background: linear-gradient(112deg, var(--living-indigo) 10%, #8173ef 42%, var(--living-coral) 75%, var(--living-indigo) 98%);
+ background-size: 220% 100%;
+ background-clip: text;
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ animation: living-title-flow 9s ease-in-out infinite;
+}
+
+.portfolio-shell.living-motion-enabled .hero-actions .button-primary,
+.portfolio-shell.living-motion-enabled .more-projects-row .button-primary {
+ position: relative;
+ overflow: hidden;
+ isolation: isolate;
+ transition:
+ translate 240ms var(--living-ease),
+ box-shadow 260ms ease,
+ border-color 260ms ease,
+ background-color 260ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .hero-actions .button-primary::after,
+.portfolio-shell.living-motion-enabled .more-projects-row .button-primary::after {
+ content: '';
+ position: absolute;
+ z-index: -1;
+ inset: -20% -70%;
+ pointer-events: none;
+ opacity: 0;
+ background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.28) 49%, transparent 61%);
+ transform: translateX(-45%);
+}
+
+.portfolio-shell.living-motion-enabled .hero-actions .button-primary:hover,
+.portfolio-shell.living-motion-enabled .more-projects-row .button-primary:hover {
+ translate: 0 -3px;
+ box-shadow: 0 12px 28px rgba(68, 61, 170, 0.16);
+}
+
+.portfolio-shell.living-motion-enabled .hero-actions .button-primary:hover::after,
+.portfolio-shell.living-motion-enabled .more-projects-row .button-primary:hover::after {
+ opacity: 1;
+ transform: translateX(45%);
+ transition: transform 700ms var(--living-ease), opacity 180ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .button-text,
+.portfolio-shell.living-motion-enabled .contact-side a,
+.portfolio-shell.living-motion-enabled .contact-email {
+ transition:
+ color 220ms ease,
+ translate 220ms var(--living-ease),
+ opacity 220ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .button-text:hover,
+.portfolio-shell.living-motion-enabled .contact-side a:hover,
+.portfolio-shell.living-motion-enabled .contact-email:hover {
+ translate: 3px 0;
+}
+
+/* Active navigation tracks the section currently being read. */
+.portfolio-shell.living-motion-enabled .site-nav {
+ transition:
+ background-color 280ms ease,
+ border-color 280ms ease,
+ box-shadow 280ms ease,
+ backdrop-filter 280ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .site-nav.is-living-scrolled {
+ background-color: rgba(244, 241, 234, 0.91);
+ border-bottom-color: rgba(37, 35, 54, 0.12);
+ box-shadow: 0 10px 32px rgba(35, 31, 54, 0.065);
+ backdrop-filter: blur(16px) saturate(1.08);
+ -webkit-backdrop-filter: blur(16px) saturate(1.08);
+}
+
+.portfolio-shell.living-motion-enabled .site-nav .nav-links a {
+ position: relative;
+ text-decoration: none;
+ transition: color 220ms ease, opacity 220ms ease, translate 220ms var(--living-ease);
+}
+
+.portfolio-shell.living-motion-enabled .site-nav .nav-links a::after {
+ content: '';
+ position: absolute;
+ right: 0;
+ bottom: -6px;
+ left: 0;
+ height: 2px;
+ border-radius: 99px;
+ background: linear-gradient(90deg, var(--living-indigo), var(--living-coral));
+ transform: scaleX(0);
+ transform-origin: left center;
+ transition: transform 260ms var(--living-ease);
+}
+
+.portfolio-shell.living-motion-enabled .site-nav .nav-links a:hover,
+.portfolio-shell.living-motion-enabled .site-nav .nav-links a.is-living-active {
+ color: var(--living-indigo);
+}
+
+.portfolio-shell.living-motion-enabled .site-nav .nav-links a:hover::after,
+.portfolio-shell.living-motion-enabled .site-nav .nav-links a:focus-visible::after,
+.portfolio-shell.living-motion-enabled .site-nav .nav-links a.is-living-active::after {
+ transform: scaleX(1);
+}
+
+/* Project tiles move with the pointer, while the existing accent color stays project-specific. */
+.portfolio-shell.living-motion-enabled .featured-card {
+ position: relative;
+ isolation: isolate;
+ overflow: hidden;
+ transition:
+ translate 340ms var(--living-ease),
+ border-color 280ms ease,
+ box-shadow 340ms ease,
+ background-color 280ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .featured-card::after {
+ content: '';
+ position: absolute;
+ z-index: 2;
+ inset: -35% -65%;
+ pointer-events: none;
+ opacity: 0;
+ background: linear-gradient(108deg, transparent 37%, rgba(255, 255, 255, 0.32) 49%, rgba(255, 255, 255, 0.06) 54%, transparent 65%);
+ transform: translateX(-40%) rotate(8deg);
+}
+
+.portfolio-shell.living-motion-enabled .featured-card:hover,
+.portfolio-shell.living-motion-enabled .featured-card:focus-visible {
+ translate: 0 -6px;
+ border-color: color-mix(in srgb, var(--project-accent, var(--living-indigo)) 52%, transparent);
+ box-shadow:
+ 0 20px 46px rgba(37, 35, 54, 0.095),
+ 0 3px 10px rgba(37, 35, 54, 0.04);
+}
+
+.portfolio-shell.living-motion-enabled .featured-card:hover::after,
+.portfolio-shell.living-motion-enabled .featured-card:focus-visible::after {
+ opacity: 1;
+ transform: translateX(40%) rotate(8deg);
+ transition: transform 800ms var(--living-ease), opacity 180ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .featured-card.is-active {
+ border-color: color-mix(in srgb, var(--project-accent, var(--living-indigo)) 43%, transparent);
+}
+
+.portfolio-shell.living-motion-enabled .featured-art {
+ transition: background-color 320ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .featured-card:hover .featured-art .project-preview-static {
+ scale: 1.035;
+}
+
+.portfolio-shell.living-motion-enabled .project-preview-static {
+ transition: scale 420ms var(--living-ease);
+}
+
+.portfolio-shell.living-motion-enabled .project-preview-static .preview-shape-a {
+ animation: living-preview-float-a 6.4s ease-in-out infinite;
+}
+
+.portfolio-shell.living-motion-enabled .project-preview-static .preview-shape-b {
+ animation: living-preview-float-b 7.1s ease-in-out infinite;
+}
+
+.portfolio-shell.living-motion-enabled .project-preview-static .preview-shape-c {
+ animation: living-preview-float-c 5.8s ease-in-out infinite;
+}
+
+.portfolio-shell.living-motion-enabled .archive-card {
+ transition:
+ translate 260ms var(--living-ease),
+ border-color 260ms ease,
+ box-shadow 260ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .archive-card:hover {
+ translate: 0 -3px;
+ border-color: color-mix(in srgb, var(--project-accent, var(--living-indigo)) 45%, transparent);
+ box-shadow: 0 12px 30px rgba(37, 35, 54, 0.08);
+}
+
+/* Experience rows and skill chips get quiet, tactile responses. */
+.portfolio-shell.living-motion-enabled .experience-row {
+ transition:
+ translate 300ms var(--living-ease),
+ border-color 260ms ease,
+ background-color 260ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .experience-row:hover {
+ translate: 5px 0;
+ border-color: rgba(90, 86, 232, 0.28);
+}
+
+.portfolio-shell.living-motion-enabled .skill-tags span {
+ transition:
+ translate 220ms var(--living-ease),
+ color 220ms ease,
+ border-color 220ms ease,
+ background-color 220ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .skill-tags span:hover {
+ translate: 0 -3px;
+ color: var(--living-indigo);
+ border-color: rgba(90, 86, 232, 0.34);
+ background-color: rgba(90, 86, 232, 0.055);
+}
+
+.portfolio-shell.living-motion-enabled .about-stamp {
+ animation: living-stamp-float 7s ease-in-out infinite;
+}
+
+/* Project changes from the existing viewer get a short transition, not a full-page animation. */
+.portfolio-shell.living-motion-enabled .scene-project-annotation {
+ transition:
+ box-shadow 260ms ease,
+ border-color 260ms ease,
+ background-color 260ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .scene-project-annotation:hover {
+ border-color: color-mix(in srgb, var(--annotation-accent, var(--living-indigo)) 48%, transparent);
+ box-shadow: 0 18px 44px rgba(29, 27, 46, 0.14);
+}
+
+.portfolio-shell.living-motion-enabled .scene-project-annotation.living-project-arrive {
+ animation: living-project-swap 440ms var(--living-ease) both;
+}
+
+.portfolio-shell.living-motion-enabled .scene-project-arrow {
+ transition:
+ scale 220ms var(--living-ease),
+ box-shadow 220ms ease,
+ border-color 220ms ease;
+}
+
+.portfolio-shell.living-motion-enabled .scene-project-arrow:hover {
+ scale: 1.08;
+ border-color: rgba(90, 86, 232, 0.42);
+ box-shadow: 0 8px 22px rgba(37, 35, 54, 0.14);
+}
+
+.portfolio-shell.living-motion-enabled .living-is-pressed {
+ animation: living-press-pulse 270ms var(--living-ease);
+}
+
+.portfolio-shell.living-motion-enabled :where(a, button, [role='button']):focus-visible {
+ outline: 2px solid rgba(90, 86, 232, 0.86);
+ outline-offset: 4px;
+}
+
+@keyframes living-eyebrow-arrive {
+ from { opacity: 0; translate: 0 8px; }
+ to { opacity: 1; translate: 0 0; }
+}
+
+@keyframes living-title-flow {
+ 0%, 100% { background-position: 0% 50%; }
+ 50% { background-position: 100% 50%; }
+}
+
+@keyframes living-preview-float-a {
+ 0%, 100% { translate: 0 0; }
+ 50% { translate: 0 -7px; }
+}
+
+@keyframes living-preview-float-b {
+ 0%, 100% { translate: 0 0; }
+ 50% { translate: 6px 4px; }
+}
+
+@keyframes living-preview-float-c {
+ 0%, 100% { translate: 0 0; }
+ 50% { translate: -5px -5px; }
+}
+
+@keyframes living-stamp-float {
+ 0%, 100% { transform: translateY(0) rotate(-2deg); }
+ 50% { transform: translateY(-7px) rotate(2deg); }
+}
+
+@keyframes living-project-swap {
+ 0% { opacity: 0.68; scale: 0.985; filter: blur(2px); }
+ 70% { opacity: 1; scale: 1.008; filter: blur(0); }
+ 100% { opacity: 1; scale: 1; filter: blur(0); }
+}
+
+@keyframes living-press-pulse {
+ 0% { scale: 0.975; }
+ 70% { scale: 1.025; }
+ 100% { scale: 1; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+ .portfolio-shell.living-motion-enabled :where(a, button, [role='button']) {
+ -webkit-tap-highlight-color: transparent;
+ }
+}
+
+@media (max-width: 720px) {
+ .portfolio-shell.living-motion-enabled .living-reveal {
+ transition-duration: 480ms;
+ }
+
+ .portfolio-shell.living-motion-enabled .featured-card:hover,
+ .portfolio-shell.living-motion-enabled .archive-card:hover,
+ .portfolio-shell.living-motion-enabled .experience-row:hover {
+ translate: 0 0;
+ }
+
+ .portfolio-shell.living-motion-enabled .hero-copy h1 em {
+ animation-duration: 12s;
+ }
+}
+
+@media (hover: none), (pointer: coarse) {
+ .portfolio-shell.living-motion-enabled .featured-card:hover,
+ .portfolio-shell.living-motion-enabled .archive-card:hover {
+ translate: 0 0;
+ box-shadow: none;
+ }
+}
+
+@media (prefers-reduced-motion: reduce) {
+ .portfolio-shell.living-motion-enabled::before {
+ background-image: none;
+ }
+
+ .portfolio-shell.living-motion-enabled .living-reveal,
+ .portfolio-shell.living-motion-enabled .living-reveal.is-living-visible {
+ opacity: 1;
+ translate: none;
+ transition: none;
+ will-change: auto;
+ }
+
+ .portfolio-shell.living-motion-enabled .hero-copy .section-eyebrow,
+ .portfolio-shell.living-motion-enabled .hero-copy h1 em,
+ .portfolio-shell.living-motion-enabled .about-stamp,
+ .portfolio-shell.living-motion-enabled .project-preview-static .preview-shape-a,
+ .portfolio-shell.living-motion-enabled .project-preview-static .preview-shape-b,
+ .portfolio-shell.living-motion-enabled .project-preview-static .preview-shape-c,
+ .portfolio-shell.living-motion-enabled .living-is-pressed,
+ .portfolio-shell.living-motion-enabled .scene-project-annotation.living-project-arrive {
+ animation: none !important;
+ }
+
+ .portfolio-shell.living-motion-enabled :where(
+ .site-nav,
+ .site-nav .nav-links a,
+ .button-primary,
+ .button-text,
+ .featured-card,
+ .archive-card,
+ .experience-row,
+ .skill-tags span,
+ .scene-project-annotation,
+ .scene-project-arrow,
+ .contact-side a,
+ .contact-email
+ ) {
+ transition: none !important;
+ translate: none;
+ scale: 1;
+ }
+}
