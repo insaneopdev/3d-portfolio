@@ -2,11 +2,11 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const [app, css, motion, specimen, specimenCss] = await Promise.all([
-  readFile('src/App.jsx', 'utf8'),
-  readFile('src/mobile-polish.css', 'utf8'),
-  readFile('src/LivingMotion.jsx', 'utf8'),
-  readFile('src/InteractiveOrbit.jsx', 'utf8'),
-  readFile('src/interactive-orbit.css', 'utf8'),
+ readFile('src/App.jsx', 'utf8'),
+ readFile('src/mobile-polish.css', 'utf8'),
+ readFile('src/LivingMotion.jsx', 'utf8'),
+ readFile('src/InteractiveOrbit.jsx', 'utf8'),
+ readFile('src/interactive-orbit.css', 'utf8'),
 ]);
 
 // Regression: keep the existing headline copy and give its italic word room to render.
