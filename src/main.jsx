@@ -6,13 +6,15 @@ import './visual-motion.css';
 import './brand-overrides.css';
 import VisualMotion from './VisualMotion.jsx';
 import LoadingScrollProgress from './LoadingScrollProgress.jsx';
+import LivingMotion from './LivingMotion.jsx';
 
 createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <>
-      <App />
-      <VisualMotion />
-      <LoadingScrollProgress />
-    </>
-  </React.StrictMode>,
+ <React.StrictMode>
+ <>
+ <App />
+ <VisualMotion />
+ <LoadingScrollProgress />
+ <LivingMotion />
+ </>
+ </React.StrictMode>,
 );

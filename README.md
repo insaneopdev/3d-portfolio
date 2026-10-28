@@ -22,8 +22,6 @@ Create a production build with `npm run build`, then preview it with `npm run pr
 
 ## Design references
 
-The direction combines the exploratory 3D world of [Bruno Simon](https://bruno-simon.com/), the immersive scroll-motion treatment featured in the [0110 Studio Awwwards showcase](https://www.awwwards.com/inspiration/3d-scroll-animation-0110-studio-portfolio-web), and scroll-driven 3D narrative principles described in [Hilo Studio's Tabasco case study](https://hilostudiolab.com/en/projects/tabasco). These are inspiration references, not copied assets or layouts.
-
 Implementation references: [Three.js WebGLRenderer documentation](https://threejs.org/docs/pages/WebGLRenderer), [React Three Fiber `useFrame` documentation](https://github.com/pmndrs/react-three-fiber/blob/master/docs/API/hooks.mdx), and [GSAP ScrollTrigger documentation](https://gsap.com/docs/v3/Plugins/ScrollTrigger/).
 
 ## Project content

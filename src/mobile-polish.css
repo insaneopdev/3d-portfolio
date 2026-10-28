@@ -1,0 +1,632 @@
+/* Responsive fixes and low-overhead motion for the existing portfolio. */
+html {
+ scroll-behavior: smooth;
+ scroll-padding-top: 100px;
+}
+
+body {
+ overflow-x: clip;
+}
+
+.portfolio-shell {
+ width: 100%;
+ max-width: 100%;
+ min-width: 0;
+ overflow-x: clip;
+}
+
+.portfolio-shell.living-motion-enabled {
+ --mobile-polish-indigo: #5a56e8;
+ --mobile-polish-coral: #ee785b;
+ --mobile-polish-ease: cubic-bezier(0.2, 0.72, 0.2, 1);
+}
+
+/* Always-visible floating navigation. The transform keeps the pill centered. */
+.portfolio-shell .site-nav {
+ position: fixed !important;
+ z-index: 9000 !important;
+ top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
+ left: 50% !important;
+ width: min(1160px, calc(100vw - 40px)) !important;
+ max-width: calc(100vw - 40px) !important;
+ min-width: 0;
+ min-height: 60px;
+ box-sizing: border-box;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: clamp(12px, 2vw, 28px);
+ padding: 8px clamp(12px, 2vw, 22px);
+ color: #252336;
+ background: rgba(250, 248, 243, 0.95);
+ border: 1px solid rgba(54, 49, 86, 0.13);
+ border-radius: 999px;
+ box-shadow: 0 8px 28px rgba(34, 31, 55, 0.1);
+ transform: translateX(-50%);
+ animation: mobile-polish-nav-enter 480ms var(--mobile-polish-ease) both;
+}
+
+.portfolio-shell .site-nav .brand-mark {
+ flex: 0 0 auto;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ min-width: 36px;
+ min-height: 36px;
+}
+
+.portfolio-shell .site-nav .brand-mark img {
+ display: block;
+ width: 38px;
+ height: 38px;
+ max-width: 100%;
+ object-fit: contain;
+}
+
+.portfolio-shell .site-nav .nav-links {
+ position: static;
+ display: flex;
+ flex: 1 1 auto;
+ align-items: center;
+ justify-content: center;
+ gap: clamp(14px, 2.4vw, 32px);
+ min-width: 0;
+ padding: 0;
+ border: 0;
+ border-radius: 0;
+ background: transparent;
+ box-shadow: none;
+}
+
+.portfolio-shell .site-nav .nav-links a {
+ position: relative;
+ flex: 0 0 auto;
+ padding: 9px 0;
+ color: inherit;
+ font-size: 0.88rem;
+ line-height: 1.25;
+ text-decoration: none;
+ white-space: nowrap;
+ transition: color 180ms ease, opacity 180ms ease, translate 180ms ease;
+}
+
+.portfolio-shell .site-nav .nav-links a::after {
+ content: '';
+ position: absolute;
+ right: 0;
+ bottom: 3px;
+ left: 0;
+ height: 2px;
+ border-radius: 99px;
+ background: linear-gradient(90deg, var(--mobile-polish-indigo), var(--mobile-polish-coral));
+ transform: scaleX(0);
+ transform-origin: left center;
+ transition: transform 220ms var(--mobile-polish-ease);
+}
+
+.portfolio-shell .site-nav .nav-links a:hover,
+.portfolio-shell .site-nav .nav-links a.is-living-active {
+ color: var(--mobile-polish-indigo);
+}
+
+.portfolio-shell .site-nav .nav-links a:hover::after,
+.portfolio-shell .site-nav .nav-links a:focus-visible::after,
+.portfolio-shell .site-nav .nav-links a.is-living-active::after {
+ transform: scaleX(1);
+}
+
+.portfolio-shell .site-nav .nav-availability {
+ display: inline-flex;
+ flex: 0 0 auto;
+ align-items: center;
+ gap: 8px;
+ padding: 9px 12px;
+ border: 1px solid rgba(54, 49, 86, 0.12);
+ border-radius: 999px;
+ color: inherit;
+ font-size: 0.68rem;
+ line-height: 1.2;
+ letter-spacing: 0.045em;
+ white-space: nowrap;
+}
+
+.portfolio-shell .site-nav .nav-availability i {
+ width: 7px;
+ height: 7px;
+ flex: 0 0 7px;
+ border-radius: 50%;
+ background: #5ca592;
+ box-shadow: 0 0 0 3px rgba(92, 165, 146, 0.12);
+}
+
+.portfolio-shell .site-nav .nav-mobile-toggle {
+ display: none;
+ flex: 0 0 38px;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ gap: 5px;
+ width: 38px;
+ height: 38px;
+ padding: 0;
+ border: 1px solid rgba(54, 49, 86, 0.14);
+ border-radius: 50%;
+ background: rgba(255, 255, 255, 0.62);
+ cursor: pointer;
+}
+
+.portfolio-shell .site-nav .nav-mobile-toggle span {
+ display: block;
+ width: 14px;
+ height: 1.5px;
+ border-radius: 99px;
+ background: currentColor;
+}
+
+.portfolio-shell.living-motion-enabled .site-nav.is-living-scrolled {
+ background: rgba(250, 248, 243, 0.98);
+ box-shadow: 0 10px 30px rgba(34, 31, 55, 0.12);
+}
+
+/* Preserve the italic 'e' in move: italic glyphs can extend beyond their advance width. */
+.portfolio-shell .hero-copy,
+.portfolio-shell .hero-copy h1 {
+ min-width: 0;
+ max-width: 100%;
+ overflow: visible !important;
+}
+
+.portfolio-shell .hero-copy h1 {
+ overflow-wrap: normal;
+ word-break: normal;
+ text-wrap: pretty;
+}
+
+.portfolio-shell .hero-copy h1 em {
+ display: inline-block;
+ max-width: 100%;
+ padding-left: 0.02em;
+ padding-right: 0.14em;
+ margin-right: -0.14em;
+ overflow: visible;
+ vertical-align: baseline;
+}
+
+.portfolio-shell .hero-section,
+.portfolio-shell .hero-copy,
+.portfolio-shell .hero-scene,
+.portfolio-shell .scene-frame,
+.portfolio-shell .featured-grid,
+.portfolio-shell .section-wrap {
+ min-width: 0;
+ max-width: 100%;
+ box-sizing: border-box;
+}
+
+.portfolio-shell .hero-section {
+ scroll-margin-top: 100px;
+ padding-top: clamp(104px, 9vw, 132px) !important;
+}
+
+.portfolio-shell .work-section,
+.portfolio-shell .experience-section,
+.portfolio-shell .about-section,
+.portfolio-shell .contact-section {
+ scroll-margin-top: 100px;
+}
+
+.portfolio-shell .scene-frame {
+ position: relative;
+ overflow: hidden;
+}
+
+.portfolio-shell .scene-frame .main-project-canvas {
+ display: block;
+ width: 100% !important;
+ min-width: 0;
+}
+
+.portfolio-shell .site-nav :where(a, button):focus-visible,
+.portfolio-shell :where(a, button, [role='button']):focus-visible {
+ outline: 2px solid rgba(90, 86, 232, 0.88);
+ outline-offset: 3px;
+}
+
+@keyframes mobile-polish-nav-enter {
+ from {
+ opacity: 0;
+ translate: 0 -9px;
+ }
+ to {
+ opacity: 1;
+ translate: 0 0;
+ }
+}
+
+@media (max-width: 980px) {
+ .portfolio-shell .site-nav {
+ width: calc(100vw - 28px) !important;
+ max-width: calc(100vw - 28px) !important;
+ gap: 14px;
+ min-height: 56px;
+ padding: 7px 12px;
+ }
+
+ .portfolio-shell .site-nav .nav-links {
+ gap: clamp(12px, 2vw, 22px);
+ }
+
+ .portfolio-shell .site-nav .nav-availability {
+ padding: 8px 9px;
+ font-size: 0.61rem;
+ }
+}
+
+@media (max-width: 720px) {
+ html {
+ scroll-padding-top: 84px;
+ }
+
+ .portfolio-shell .site-nav {
+ top: calc(env(safe-area-inset-top, 0px) + 9px) !important;
+ width: calc(100vw - 24px) !important;
+ max-width: calc(100vw - 24px) !important;
+ min-height: 54px;
+ justify-content: space-between;
+ gap: 10px;
+ padding: 6px 9px;
+ border-radius: 20px;
+ background: rgba(250, 248, 243, 0.98);
+ box-shadow: 0 6px 22px rgba(34, 31, 55, 0.11);
+ backdrop-filter: none;
+ -webkit-backdrop-filter: none;
+ }
+
+ .portfolio-shell .site-nav .brand-mark,
+ .portfolio-shell .site-nav .brand-mark img {
+ width: 36px;
+ height: 36px;
+ min-width: 36px;
+ min-height: 36px;
+ }
+
+ .portfolio-shell .site-nav .nav-availability {
+ display: none !important;
+ }
+
+ .portfolio-shell .site-nav .nav-mobile-toggle {
+ display: inline-flex !important;
+ }
+
+ .portfolio-shell .site-nav .nav-links {
+ position: absolute !important;
+ top: calc(100% + 8px) !important;
+ right: 0 !important;
+ left: 0 !important;
+ z-index: 2;
+ display: none !important;
+ flex-direction: column !important;
+ align-items: stretch !important;
+ justify-content: flex-start !important;
+ gap: 2px !important;
+ width: 100%;
+ min-width: 0;
+ padding: 9px !important;
+ border: 1px solid rgba(54, 49, 86, 0.14) !important;
+ border-radius: 18px !important;
+ background: rgba(250, 248, 243, 0.99) !important;
+ box-shadow: 0 12px 28px rgba(34, 31, 55, 0.12) !important;
+ }
+
+ .portfolio-shell .site-nav .nav-links.nav-links-open {
+ display: flex !important;
+ }
+
+ .portfolio-shell .site-nav .nav-links a {
+ width: 100%;
+ box-sizing: border-box;
+ padding: 12px 13px;
+ border-radius: 11px;
+ white-space: normal;
+ font-size: 0.92rem;
+ }
+
+ .portfolio-shell .site-nav .nav-links a:hover,
+ .portfolio-shell .site-nav .nav-links a.is-living-active {
+ background: rgba(90, 86, 232, 0.065);
+ }
+
+ .portfolio-shell .site-nav .nav-links a::after {
+ display: none;
+ }
+
+ .portfolio-shell .hero-section {
+ display: grid !important;
+ grid-template-columns: minmax(0, 1fr) !important;
+ align-items: start !important;
+ gap: clamp(30px, 7vw, 42px) !important;
+ width: 100%;
+ padding: 100px 18px 36px !important;
+ }
+
+ .portfolio-shell .hero-copy {
+ width: 100%;
+ margin: 0;
+ }
+
+ .portfolio-shell .hero-copy h1 {
+ max-width: 100%;
+ font-size: clamp(2.2rem, 9.05vw, 3.15rem) !important;
+ line-height: 1.08 !important;
+ letter-spacing: -0.055em;
+ overflow: visible !important;
+ }
+
+ .portfolio-shell .hero-copy h1 em {
+ padding-right: 0.17em;
+ margin-right: -0.17em;
+ }
+
+ .portfolio-shell .hero-intro {
+ max-width: 100%;
+ font-size: clamp(0.93rem, 3.9vw, 1.02rem);
+ line-height: 1.7;
+ overflow-wrap: anywhere;
+ }
+
+ .portfolio-shell .hero-actions {
+ display: flex;
+ flex-wrap: wrap;
+ align-items: center;
+ gap: 10px 16px;
+ max-width: 100%;
+ }
+
+ .portfolio-shell .hero-actions > * {
+ max-width: 100%;
+ }
+
+ .portfolio-shell .hero-actions .button-primary {
+ min-height: 44px;
+ box-sizing: border-box;
+ }
+
+ .portfolio-shell .hero-index {
+ gap: 12px;
+ flex-wrap: wrap;
+ font-size: 0.63rem;
+ }
+
+ .portfolio-shell .hero-scene {
+ width: 100%;
+ max-width: 100%;
+ min-width: 0;
+ margin: 0;
+ }
+
+ .portfolio-shell .scene-frame {
+ width: 100%;
+ height: clamp(390px, 106vw, 430px) !important;
+ min-height: 390px;
+ max-height: 430px;
+ border-radius: 22px;
+ overflow: hidden !important;
+ }
+
+ .portfolio-shell .scene-frame .main-project-canvas {
+ position: absolute;
+ inset: 0;
+ width: 100% !important;
+ height: 100% !important;
+ min-height: 0 !important;
+ }
+
+ .portfolio-shell .scene-frame .main-project-canvas canvas {
+ display: block;
+ width: 100% !important;
+ height: 100% !important;
+ }
+
+ /* The Drei HTML annotation is positioned using desktop world coordinates and clips on phones.
+ The existing focus card below the model still displays the active project's information. */
+ .portfolio-shell .scene-project-annotation {
+ display: none !important;
+ visibility: hidden !important;
+ pointer-events: none !important;
+ }
+
+ .portfolio-shell .scene-focus-card {
+ position: absolute !important;
+ z-index: 6;
+ right: 10px !important;
+ bottom: 12px !important;
+ left: 10px !important;
+ width: auto !important;
+ max-width: none !important;
+ min-width: 0 !important;
+ box-sizing: border-box;
+ padding: 12px 13px !important;
+ transform: none;
+ }
+
+ .portfolio-shell .scene-focus-card strong,
+ .portfolio-shell .scene-focus-card .focus-category,
+ .portfolio-shell .scene-focus-card .focus-cta {
+ max-width: 100%;
+ overflow-wrap: anywhere;
+ }
+
+ .portfolio-shell .scene-caption,
+ .portfolio-shell .scene-side-note {
+ display: none !important;
+ }
+
+ .portfolio-shell .scene-topline {
+ left: 12px;
+ right: 12px;
+ max-width: calc(100% - 24px);
+ box-sizing: border-box;
+ }
+
+ .portfolio-shell .section-wrap {
+ width: 100%;
+ padding-right: 18px;
+ padding-left: 18px;
+ }
+
+ .portfolio-shell .featured-grid {
+ display: grid;
+ grid-template-columns: minmax(0, 1fr) !important;
+ gap: 16px;
+ width: 100%;
+ }
+
+ .portfolio-shell .featured-card {
+ width: 100%;
+ min-width: 0;
+ box-sizing: border-box;
+ }
+
+ .portfolio-shell .featured-card-text,
+ .portfolio-shell .featured-art,
+ .portfolio-shell .archive-card-copy {
+ min-width: 0;
+ overflow-wrap: anywhere;
+ }
+
+ .portfolio-shell .more-projects-row {
+ flex-wrap: wrap;
+ align-items: flex-start;
+ gap: 16px;
+ }
+
+ .portfolio-shell .experience-row {
+ display: grid;
+ grid-template-columns: 28px minmax(0, 1fr);
+ gap: 8px 12px;
+ padding-top: 18px;
+ padding-bottom: 18px;
+ }
+
+ .portfolio-shell .experience-row > p,
+ .portfolio-shell .experience-row > time {
+ grid-column: 2;
+ min-width: 0;
+ overflow-wrap: anywhere;
+ }
+
+ .portfolio-shell .about-section,
+ .portfolio-shell .contact-section {
+ display: grid;
+ grid-template-columns: minmax(0, 1fr) !important;
+ gap: 26px;
+ }
+
+ .portfolio-shell .about-stamp {
+ width: fit-content;
+ max-width: 100%;
+ }
+
+ .portfolio-shell .skill-tags {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 8px;
+ }
+
+ .portfolio-shell .contact-side {
+ min-width: 0;
+ overflow-wrap: anywhere;
+ }
+
+ .portfolio-shell .contact-side a {
+ flex-wrap: wrap;
+ overflow-wrap: anywhere;
+ }
+
+ .portfolio-shell .archive-grid {
+ grid-template-columns: minmax(0, 1fr) !important;
+ }
+
+ .portfolio-shell .archive-heading {
+ display: flex;
+ flex-direction: column;
+ align-items: stretch;
+ gap: 18px;
+ }
+
+ .portfolio-shell .archive-search {
+ width: 100%;
+ box-sizing: border-box;
+ }
+
+ /* Avoid permanent motion and expensive layered effects on small touch devices. */
+ .portfolio-shell .hero-copy h1 em,
+ .portfolio-shell .about-stamp,
+ .portfolio-shell .project-preview-static .preview-shape-a,
+ .portfolio-shell .project-preview-static .preview-shape-b,
+ .portfolio-shell .project-preview-static .preview-shape-c {
+ animation: none !important;
+ }
+
+ .portfolio-shell .featured-card::after {
+ display: none !important;
+ }
+
+ .portfolio-shell.living-motion-enabled .living-reveal {
+ transition-duration: 300ms;
+ }
+
+ .portfolio-shell.living-motion-enabled .site-nav {
+ backdrop-filter: none;
+ -webkit-backdrop-filter: none;
+ }
+}
+
+@media (max-width: 380px) {
+ .portfolio-shell .hero-section {
+ padding-right: 14px !important;
+ padding-left: 14px !important;
+ }
+
+ .portfolio-shell .hero-copy h1 {
+ font-size: clamp(2.05rem, 8.9vw, 2.5rem) !important;
+ letter-spacing: -0.06em;
+ }
+
+ .portfolio-shell .hero-index {
+ font-size: 0.58rem;
+ }
+
+ .portfolio-shell .scene-frame {
+ height: 390px !important;
+ min-height: 390px;
+ }
+
+ .portfolio-shell .scene-focus-card {
+ right: 8px !important;
+ left: 8px !important;
+ padding: 10px !important;
+ }
+}
+
+@media (prefers-reduced-motion: reduce) {
+ html {
+ scroll-behavior: auto;
+ }
+
+ .portfolio-shell .site-nav,
+ .portfolio-shell .site-nav .nav-links a,
+ .portfolio-shell .scene-project-arrow,
+ .portfolio-shell .featured-card,
+ .portfolio-shell .archive-card,
+ .portfolio-shell .experience-row {
+ animation: none !important;
+ transition: none !important;
+ }
+
+ .portfolio-shell .living-reveal,
+ .portfolio-shell .living-reveal.is-living-visible {
+ opacity: 1 !important;
+ translate: none !important;
+ }
+}
